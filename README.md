@@ -1,32 +1,39 @@
-<h1 align="center">Welcome to JIDS-Frontend 👋</h1>
-<p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.0.0-blue.svg?cacheSeconds=2592000" />
-  <a href="https://twitter.com/Gingarenpo" target="_blank">
-    <img alt="Twitter: Gingarenpo" src="https://img.shields.io/twitter/follow/Gingarenpo.svg?style=social" />
-  </a>
-</p>
+# 🚥JIDS-Frontend （クライアントサイド）🚥
+<img src="https://img.shields.io/badge/Open_source-Free-blue">
 
-> JIDS Frontend with Vite
+Sorry, but this project is Japanese only.
 
-### 🏠 [Homepage](https://jids.ginren.info)
+## What is this?（これなあに？）
+JIDSは、全国の信号機に関する情報を集約し、検索・閲覧することができることを目標としたシステムとなります。
+信号機ファンによる信号機ファン向けのシステムとなります。
 
-## Install
+元々は銀河連邦による「全国ストリートビュー計画」から始まり、一人でクローズドな開発をしていましたが、システムの肥大化と（想像以上の）需要、多数の情報提供などでクローズドでは限界を迎えたため、オープンソース化しました。
 
-```sh
+…といっても、このソースはローカルに利用者がインストールして使ってもらうものではありません。あくまで、共同開発者向けのリポジトリとして整備している状態です。
+
+JIDSを単に利用したい場合はこのリポジトリをチェックする必要はありません。以降、開発者前提でReadmeを記します。
+
+## How to develop?（開発したい！）
+共同開発者は大歓迎です。積極的に参加してください。方針などまだ不透明な部分があったりしますが、できる限り開発しやすい環境を整えたり、新しいことにチャレンジする予定です。
+
+元々管理人の銀河連邦がどうしようもなく独自のスタイルのコーディングをする傾向にあるので、見づらいコードになるのをなるべく防止すべくいろいろ導入しています。。
+
+それでは、開発をしたい方向けの手順をここに記します。
+
+### 1. Clone this repository（リポジトリをクローン）
+前提として、お使いのPCにgit、nodeJSがインストールされている必要があります。
+
+以下のコマンドを実行していくと開発環境を構築できます。（Windows / Linux共通、Macは知らん）
+```bash
+git clone https://github.com/Gingarenpo/JIDS-Frontend
+cd JIDS-Frontend
 npm install
 ```
 
-## Author
+なお基本的にこのリポジトリだけでは動作しないので、通常は親リポジトリである<a href="https://github.com/Gingarenpo/JIDS">こちらのリポジトリ</a>もクローンする必要があります。というかこのリポジトリのサブモジュールが当リポジトリなのでそっちをクローンしたほうがいいです。
 
-👤 **Gingarenpo**
-
-* Website: https://ginren.info
-* Twitter: [@Gingarenpo](https://twitter.com/Gingarenpo)
-* Github: [@Gingarenpo](https://github.com/Gingarenpo)
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
-
-***
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
+### 2. Preview （プレビュー）
+```bash
+npm run dev
+```
+これで開発サーバーが立ち上がります。
