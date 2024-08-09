@@ -2,17 +2,35 @@
   "name": "jids-frontend",
   "private": true,
   "version": "0.0.0",
+  "description": "JIDS Frontend with Vite",
+  "keywords": [
+    "JIDS",
+    "Search"
+  ],
   "type": "module",
+  "author": {
+    "name": "Gingarenpo",
+    "email": "gingarenpo.9844@gmail.com",
+    "url": "https://ginren.info"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint-dry": "eslint './src/**/*.{js,vue}'"
   },
   "dependencies": {
     "vue": "^3.4.35"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.8.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.1",
+    "@typescript-eslint/parser": "^8.0.1",
     "@vitejs/plugin-vue": "^5.1.2",
+    "eslint": "^9.8.0",
+    "eslint-plugin-vue": "^9.27.0",
+    "readme-md-generator": "^1.0.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.0",
     "vue-tsc": "^2.0.29"
