@@ -20,17 +20,17 @@
     "lint-dry": "eslint './src/**/*.{js,vue}'"
   },
   "dependencies": {
-    "vue": "^3.4.35"
+    "@unhead/vue": "^1.10.0",
+    "axios": "^1.7.4",
+    "dotenv": "^16.4.5",
+    "vue": "^3.4.35",
+    "vue-meta": "^2.4.0",
+    "vue-router": "^4.4.3"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.8.0",
-    "@typescript-eslint/eslint-plugin": "^8.0.1",
-    "@typescript-eslint/parser": "^8.0.1",
+    "@types/node": "^22.5.0",
     "@vitejs/plugin-vue": "^5.1.2",
-    "eslint": "^9.8.0",
-    "eslint-plugin-vue": "^9.27.0",
-    "readme-md-generator": "^1.0.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.0",
     "vue-tsc": "^2.0.29"

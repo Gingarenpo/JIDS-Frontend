@@ -1,79 +1,117 @@
+/* Webfont インポート */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Kosugi+Maru&family=Manrope:wght@600..800&display=swap');
+
+/* root */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* 色系 */
+  --primary-color: #00ff00;
+  --sub-color: #80ff80;
+  --dark-color: #008000;
+  --text-color: #000000;
+  --background-color: #efefef;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --disabled-color: #aaaaaa;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+* {
+  box-sizing: border-box;
+  font-size: 12pt;
+  font-family: "Manrope", "Kosugi Maru", sans-serif;
   margin: 0;
+  padding: 0;
+  color: var(--text-color);
+}
+
+/* 全体 */
+body {
+  width: 100svw;
+  height: 100svh;
+  overflow: hidden;
+  background-color: var(--background-color);
+}
+
+
+/* 見出し */
+h2 {
+  font-size: 2rem;
+  font-weight: 900;
+  border-bottom: 0.25rem solid green;
+  background-color: white;
+  margin: 0.5rem;
+}
+
+/* 各種デフォルト */
+ul {
+  margin: 0.5rem;
+}
+
+li {
+  margin: 0.5rem;
+  margin-left: 1rem;
+}
+
+.no-link {
+  font-size: inherit;
+  text-decoration: none;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+div {
+  width: 100%;
+}
+
+/* ヘッダー */
+header {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  justify-content: space-between;
+  align-items: center;
+  background-image: linear-gradient(180deg, var(--sub-color) 80%, rgba(0, 0, 0, 0));
+  height: 4rem;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+header h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  margin: 0.25rem 0;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+/* コンテナ */
+#container {
+  width: 100svw;
+  height: calc(100svh - 4rem - 2rem);
+  display: flex;
+  flex-direction: row-reverse;
 }
 
-.card {
-  padding: 2em;
+/* メイン */
+main {
+  width: 80%;
+  overflow: scroll;
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* サイドバー */
+#side {
+  width: 20%;
+  background-color: white;
+  height: 100%;
+} 
+
+/* フッター */
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 2rem;
+  background-image: linear-gradient(0deg, var(--sub-color) 80%, rgba(0, 0, 0, 0));
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* flex box */
+.flex {
+  display: flex;
+  justify-content: space-between;
 }
