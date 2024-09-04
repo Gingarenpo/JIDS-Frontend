@@ -6,18 +6,23 @@
     // メッセージを格納するref
     const message = ref(props.message);
 
-    // メッセージの内容を変更するfunction
-    function changeMessage(newMessage: string) {
-        message.value = newMessage
-    }
+    // Loadingアイコンはタイムアウト時間を超えたら文言を変える
+    setTimeout(() => {
+        message.value = "ちょっと時間がかかっているようです……";
+    }, 5000);
+    setTimeout(() => {
+        message.value = "あまりにも時間がかかりすぎています……";
+    }, 10000);
+    setTimeout(() => {
+        message.value = "エラーが発生している可能性があります……";
+    }, 15000);
 
-    defineExpose({changeMessage})
 </script>
 
 <template>
     <div class="loading">
         <div class="loading-icon"></div>
-        <p>{{ props.message ?? "Now Loading" }}</p>
+        <p>{{ message ?? "Now Loading" }}</p>
     </div>
 </template>
 

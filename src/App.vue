@@ -8,7 +8,9 @@
   </header>
   <div id="container">
     <main>
-      <RouterView />
+      <router-view v-slot="{ Component }">
+          <component :is="Component" />
+      </router-view>
     </main>
     <div id="side">
       <Side/>

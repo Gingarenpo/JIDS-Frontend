@@ -10,4 +10,13 @@ export default defineConfig({
   },
 
   envPrefix: ["PUBLIC_"],
+
+  // 開発環境の場合、Dataディレクトリをenvで指定した場所にする
+  resolve: {
+    alias: {
+      "@": "/src",
+
+      "@@": process.env.DATA_DIR ?? "public",
+    }
+  }
 })
