@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>JIDS - 全日本交差点検索システム</title>
     <script src="https://kit.fontawesome.com/cc407b74f2.js" crossorigin="anonymous"></script>
+    <script>
+      // リロード時はlocalStorageからトークン情報を読み込み
+      window.addEventListener("load", (e) => {
+        const perfEntries = performance.getEntriesByType("navigation");
+        if (perfEntries[0].type === "reload") {
+          // リロードなのでストレージから取得
+          console.log(localStorage.getItem("token"));
+
+        }
+      });
+    </script>
   </head>
   <body>
     <div id="app"></div>

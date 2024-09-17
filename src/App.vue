@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { getDataFromJWT } from './helpers/helpers';
+import { computed, ref, watch } from 'vue';
+import { useTokenStore } from './store';
 
+  const store = useTokenStore();
+  const json = computed(() => getDataFromJWT(store.token));
 </script>
 
 <template>
@@ -18,6 +23,7 @@
   </div>
   <footer>
     <p>&copy; 2024 Gingarenpo. All rights reserved.</p>
+    <p v-if="json">ようこそ、<RouterLink to="/conpane/me">{{json.user_name}}</RouterLink>さん</p>
   </footer>
 </template>
 

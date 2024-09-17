@@ -2,57 +2,59 @@ import { createWebHistory, createRouter } from "vue-router";
 
 import Home from "./pages/Home.vue";
 import Error404 from "./pages/common/Error404.vue";
-import Prefs from "./pages/Prefs.vue";
-import Pref from "./pages/Pref.vue";
-import Area from "./pages/Area.vue";
-import Intersection from "./pages/Intersection.vue";
-import MapSearch from "./pages/MapSearch.vue";
+import Test from "./pages/Test.vue";
+import conpane from "./routers/conpane";
+import front from "./routers/front";
+import { useTokenStore } from "./store";
 
 // ルーターの定義
 export const router = createRouter({
-    history: createWebHistory(),
-    routes: [
-        // ホーム画面
-        {
-            path: "/",
-            name: "Home",
-            component: Home,
-        },
-        // 404 Not Found
-        {
-            path: "/:pathMatch(.*)*",
-            name: "NotFound",
-            component: Error404,
-        },
-        // 都道府県検索
-        {
-            path: "/pref",
-            name: "Pref",
-            component: Prefs,
-        },
-        // 地図から検索
-        {
-            path: "/map",
-            name: "Map",
-            component: MapSearch,
-        },
-        // エリア検索
-        {
-            path: "/:pref/",
-            name: "Area",
-            component: Pref,
-        },
-        // 交差点一覧
-        {
-            path: "/:pref/:area",
-            name: "Intersection",
-            component: Area,
-        },
-        // 交差点詳細
-        {
-            path: "/:pref/:area/:intersection",
-            name: "IntersectionDetail",
-            component: Intersection,
+        history: createWebHistory(),
+        routes: [
+            // テスト画面
+            {
+                path: "/test",
+                name: "Test",
+                component: Test,
+            },
+            // ホーム画面
+            {
+                path: "/",
+                name: "Home",
+                component: Home,
+            },
+            // 404 Not Found
+            {
+                path: "/:pathMatch(.*)*",
+                name: "NotFound",
+                component: Error404,
+            },
+    
+            // コンパネ
+            ...conpane.routes,
+    
+            // フロント
+            ...front.routes,
+        ],
+    });
+    
+    router.beforeEach((to, from, next) => {
+        const store = useTokenStore();
+        // 認証済みの場合は無視
+        if (store.token !== null) {
+            return next();
         }
-    ],
-})
+    
+        // フロントはオールスキップ
+        if (front.routes.map((r) => r.name).includes(to.name) || ["Home", "NotFound"].includes(to.name)) {
+            return next();
+        }
+
+        // ログイン画面などもスキップ
+        if (to.name === "conpaneLogin" || to.name === "conpaneSignup" || to.name === "conpanePasswordReissue") {
+            return next();
+        }
+    
+        // そうでない場合は強制ログイン画面へ
+        return next({ name: "conpaneLogin" });
+    });
