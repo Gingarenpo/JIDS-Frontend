@@ -1,14 +1,16 @@
 <script lang="ts" setup>
     import zip from '../../assets/images/conpane/zip.png';
-    import {ref} from 'vue';
+    import {computed, ref} from 'vue';
     import { useUploadStore } from '../../store';
     import Dialog from '../../components/common/Dialog.vue';
     import axios, { AxiosProgressEvent } from 'axios';
     import { axiosWithJWTToken, formatByte } from '../../helpers/helpers';
     import Loading from '../../components/common/Loading.vue';
+    import { useRouter } from 'vue-router';
 
     // はじめにフラグ
     const done = ref(false);
+    const router = useRouter();
 
     // すでに一度理解している場合はスキップ
     const uploadStore = useUploadStore();
@@ -36,12 +38,48 @@
             onUploadProgress: uploading,
         })
         .then(response => {
-            //
+            const data = response.data;
+            // nullの場合はトークン再発行にも失敗している
+            if (data == null) {
+                router.push({ name: "conpaneLogin" });
+                return;
+            }
+            if (response.status == 400) {
+                uploadFlag.value = -2;
+                errorMessage.value = data.message;
+                return;
+            }
+            // 処理完了;
+            // それぞれ代入
+            ignores.value = data.entries.ignore;
+            thumbnails.value = data.entries.thumbnail;
+            details.value = data.entries.detail;
+
+            if (data.message != undefined) {
+                // 何らかのエラーが発生している
+                uploadFlag.value = -1;
+                return;
+            }
+            // キューIDを代入
+            queueId.value = data.queue.id;
+
+            uploadFlag.value = 4;
         })
         .catch(ex => {
-            // 
+            console.log(ex);
+            // 400エラーの場合不正リクエスト
+            
         });
     }
+
+    // アップロードタイトル
+    const uploadTitle = computed(() => {
+        return (
+            uploadFlag.value == 0 || uploadFlag.value == 1 ? "アップロード中…"
+            : uploadFlag.value == 2 ? "キュー処理中"
+            : "アップロード結果"
+        )
+    });
 
     // アップロード中の進捗
     const progress = ref(0);
@@ -51,6 +89,26 @@
         progress.value = e.progress ?? 0;
         loaded.value = e.loaded ?? 0;
         total.value = e.total ?? 0;
+        // 完了した場合はフラグ返る
+        if (e.progress == 1) {
+            uploadFlag.value = 2;
+        }
+    }
+
+    // キューID
+    const queueId = ref("");
+
+    // 結果格納
+    const ignores = ref([]);
+    const thumbnails = ref([]);
+    const details = ref([]);
+
+    const errorMessage = ref("");
+
+
+    // ダイアログ閉じる
+    function closeDialog(e) {
+        uploadFlag.value = 0;
     }
 </script>
 
@@ -88,15 +146,7 @@
     <div v-else>
         <p>※一度すでにキューの作り方を閲覧しているのでいきなりアップロード画面を表示しています。もう一度見返したい方は<a @click="unread" style="text-decoration: underline;">こちら</a>をクリックしてください。</p>
         <h2 id="upload">Zipファイルのアップロード</h2>
-        <div class="error">
-            <p>分割アップロードは原則禁止です</p>
-            <p>Zipファイルでまとめることにより、1回のアップロードで複数の交差点をアップロードすることができます。数回に分けてZipファイルをアップロードする場合、やむを得ない場合を除いて原則すべて却下しますので、一度でお送りください。</p>
-            <p>容量制限を設けておりますので、この限界に引っかかる場合は画像を圧縮してください。それができない場合（怠惰は理由になりません）のみ、分割アップロードを認めていますが、現状一気に10000枚くらいの写真を提供しない限り容量制限を超えることはないです。</p>
-        </div>
-        <div class="warn">
-            <p>アップロード回数には制限があります</p>
-            <p>サーバーへの負荷を防止する観点から、1日にアップロードできる回数に上限を設けています。上限に達した場合は翌日までお待ちください。</p>
-        </div>
+        
         <p>Zipファイルは<b>4GB</b>までのファイルをアップロードすることができます。</p>
         <form name="form" @submit="upload">
             <input type="file" name="file" accept="application/zip" required>
@@ -105,7 +155,7 @@
             <input type="submit" value="Zipファイルを送信する">
         </form>
 
-        <Dialog title="アップロードを実行中です……" v-if="uploadFlag > 0">
+        <Dialog :title="uploadTitle" :type="uploadFlag < 0 ? 'error' : 'info'" v-if="uploadFlag != 0">
             <div v-if="uploadFlag == 1">
                 <p>アップロード中です。しばらくお待ちください。</p>
                 <progress :value="progress"></progress>
@@ -113,6 +163,28 @@
             </div>
             <div v-else-if="uploadFlag == 2">
                 <Loading message="Zipファイルをチェックしています……" :timeout="60000"/>
+            </div>
+            <div v-else-if="uploadFlag == 4">
+                <p>キューが登録されました。<br><br>キューIDは「{{ queueId }}」です。<br><br>このキューIDは確認時に必要となりますので、控えてください。</p>
+                <p>検出結果：サムネイル{{ Object.values(thumbnails).map(x => Object.values(x).map(y => Object.values(y))).flat(Infinity).length }}交差点 / 現地調査{{ Object.values(details).map(x => Object.values(x).map(y => Object.values(y))).flat(Infinity).length }}交差点</p>
+                <p v-if="ignores.length > 0">なお、以下のファイルは無効なファイルとして登録されませんでした。結果が芳しくない場合は、再度アップロードしてください。</p>
+                <ul style="border: 1px solid black; padding: 0 1rem; overflow-y: scroll; height: 10rem;" v-if="ignores.length > 0">
+                    <li v-for="ignore in ignores">{{ ignore.path }}（{{ ignore.reason }}）</li>
+                </ul>
+
+                <button @click="closeDialog">OK</button>
+            </div>
+            <div v-else-if="uploadFlag == -1">
+                <p>有効なファイルが存在しないため、キューが登録されませんでした。<wbr>以下に認識したファイル名と無効とみなされた理由を示しますので、<wbr>修正のうえ再送をお願いいたします。</p>
+                <ul style="border: 1px solid black; padding: 0 1rem; overflow-y: scroll; height: 10rem;">
+                    <li v-for="ignore in ignores">{{ ignore.path }}（{{ ignore.reason }}）</li>
+                </ul>
+                <button @click="closeDialog">OK</button>
+            </div>
+            <div v-else-if="uploadFlag == -2">
+                <p>アップロードされたファイルに不備があるため、処理に失敗しました。以下の原因をお確かめの上、再送をお願いいたします。</p>
+                <p style="color: red;">{{ errorMessage }}</p>
+                <button @click="closeDialog">OK</button>
             </div>
         </Dialog>
     </div>

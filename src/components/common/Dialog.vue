@@ -1,12 +1,32 @@
 <script lang="ts" setup>
-    const props = defineProps(["title"]);
+    import { computed } from 'vue';
+    const props = defineProps({
+        title: { type: String, default: "Dialog" },
+        type: { type: String, default: "info" },
+    });
+
+    const iconClass = computed(() => {
+        switch (props.type) {
+            case "info":
+                return "fa-solid fa-info-circle";
+            case "warning":
+                return "fa-solid fa-exclamation-triangle";
+            case "error":
+                return "fa-solid fa-circle-xmark";
+            default:
+                return "fa-solid fa-info-circle";
+        }
+    })
 </script>
 
 <template>
     <div id="overlay"></div>
-    <div id="dialog">
-        <p>{{ props.title }}</p>
-        <slot>Ooops</slot>
+    <div id="dialog" :class="props.type">
+        <div class="contents">
+            <p><i :class="iconClass"></i>{{ props.title }}</p>
+            <slot>Ooops</slot>
+        </div>
+        <button v-if="props.showButton">OK</button>
     </div>
 </template>
 
@@ -55,6 +75,11 @@
         animation: show-dialog 0.3s both;
     }
 
+    #dialog .contents {
+        height: 90%;
+        overflow-y: scroll;
+    }
+
     :slotted(button) {
         display: block;
         margin: auto;
@@ -69,5 +94,18 @@
         font-weight: 900;
         border-bottom: 2px solid gray;
         margin-bottom: 1rem;
+    }
+
+    #dialog p:first-child i {
+        font-size: inherit;
+        color: inherit;
+    }
+
+    #dialog.warn p:first-child {
+        color: orange;
+    }
+
+    #dialog.error p:first-child {
+        color: red;
     }
 </style>

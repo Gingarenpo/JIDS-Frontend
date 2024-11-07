@@ -68,22 +68,30 @@ export async function axiosWithJWTToken(type: string,url:string, param?:object, 
             const userId = cookies.get("user_id");
             const password = cookies.get("password");
             if (userId === null || password === null) {
+                console.debug("!? cookie missing!!!!");
                 return null; // ログインできてない
             }
     
-            const res = await axios.post(import.meta.env.PUBLIC_SERVER_ROOT + "/auth/login", {
-                id: userId,
-                password: password
-            });
+            let res;
+            try {
+                res = await axios.post(import.meta.env.PUBLIC_SERVER_ROOT + "/auth/login", {
+                    id: userId,
+                    password: password
+                });
+            }
+            catch (e:any) {
+                return null;
+            }
             store.login(res.data.access_token);
+            console.debug("トークン払い出し成功: " + store.token); ;
             return await axiosWithJWTToken(type, url, param, ++retryCount);
         }
-        return e.response.data;
+        return e.response;
     }
 
     
 
-    return res.data;
+    return res;
 }
 
 
@@ -111,4 +119,17 @@ export function formatByte(size: number): string {
     else {
         return (Math.round(size / 1024 / 1024 / 1024 * 100) / 100).toLocaleString() + "GB";
     }
+}
+
+// 日付変換
+export function formatDate(date: String): string | null {
+    if (date === null || date === undefined) return null;
+    const d = new Date(date);
+    return d.getFullYear() + '/' + ('00' + (d.getMonth() + 1)).slice(-2) + '/' + ('00' + d.getDate()).slice(-2) + ' ' + ('00' + d.getHours()).slice(-2) + ':' + ('00' + d.getMinutes()).slice(-2) + ':' + ('00' + d.getSeconds()).slice(-2);
+}
+
+
+// スマホ判別
+export function isMobile(): boolean {
+    return window.matchMedia && window.matchMedia("(max-width: 800px)").matches;
 }

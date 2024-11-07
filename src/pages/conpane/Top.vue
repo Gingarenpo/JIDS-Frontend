@@ -1,9 +1,10 @@
 <script lang="ts" setup>
     import { computed, ref } from 'vue';
-    import { axiosWithJWTToken, getDataFromJWT } from '../../helpers/helpers';
+    import { axiosWithJWTToken, getDataFromJWT, isMobile } from '../../helpers/helpers';
     import { logout as logout2 } from '../../helpers/helpers';
     import { useRouter } from 'vue-router';
     import { useTokenStore } from '../../store';
+
 
     const store = useTokenStore();
     const router = useRouter();
@@ -20,6 +21,11 @@
         router.push({ name: "conpaneLogin" });
     }
 
+    // モバイル？
+    const mobile = computed(() => {
+        return isMobile();
+    })
+
 
     
 </script>
@@ -27,6 +33,10 @@
 <template>
     <h2>ようこそ</h2>
     <p>JIDSのコントロールパネルへようこそ。こちらでは、情報の取得・修正・作成などを行うことができます。</p>
+    <div class="warn" v-if="mobile">
+        <p>モバイル端末からのアクセスは推奨されていません</p>
+        <p>画面の解像度が推奨を満たしていません。今後対応予定ですが、現時点では一部の表記が崩れる場合があります。可能なら、パソコンでのアクセスをお勧めいたします。</p>
+    </div>
     <div class="menu">
         <div><RouterLink to="/conpane/me">
             <i class="fa-solid fa-user"></i>

@@ -23,7 +23,7 @@ import { useTokenStore } from './store';
   </div>
   <footer>
     <p>&copy; 2024 Gingarenpo. All rights reserved.</p>
-    <p v-if="json">ようこそ、<RouterLink to="/conpane/me">{{json.user_name}}</RouterLink>さん</p>
+    <p v-if="json">ようこそ、<RouterLink to="/conpane">{{json.user_name}}</RouterLink>さん</p>
   </footer>
 </template>
 

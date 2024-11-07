@@ -70,7 +70,7 @@ import noImage from '../assets/images/noimage.jpg';
             <img :src="props.intersection.thumbnail ?? noImage">
             <div>
                 <h2>[{{ props.intersection.areaId }}-{{ props.intersection.id >= area.unknownStart ? '???' : props.intersection.id }}] {{ props.intersection.name }}{{ props.intersection.isOfficialName ? '' : '（仮）' }}</h2>
-                <div class="info">
+                <div class="info-intersection">
                     <div>
                         <p>新設年度</p>
                         <p>{{ props.intersection.operationYear ?? '不明' }}</p>
@@ -171,14 +171,14 @@ import noImage from '../assets/images/noimage.jpg';
         background-color: var(--disabled-color);
         cursor: not-allowed;
     }
-    .info {
+    .info-intersection {
         display: flex;
         justify-content: flex-start;
         align-items: top;
         width: 100%;
         flex-wrap: wrap;
     }
-    .info div {
+    .info-intersection div {
         flex-basis: 25%;
         text-align: center;
         display: flex;
@@ -186,11 +186,11 @@ import noImage from '../assets/images/noimage.jpg';
         align-items: center;
         justify-content: start;
     }
-    .info div p:first-child {
+    .info-intersection div p:first-child {
         font-size: 1rem;
         line-height: 0.8rem;
     }
-    .info div p:nth-child(2), .info div p:nth-child(2) span:not(.city):not(.group) {
+    .info-intersection div p:nth-child(2), .info div p:nth-child(2) span:not(.city):not(.group) {
         font-size: 2rem;
         font-weight: 900;
     }

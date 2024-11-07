@@ -182,22 +182,39 @@ div.info, div.warn, div.error {
   margin: 0.5rem;
 }
 
-div.info p:first-child, div.warn p:first-child, div.error p:first-child {
+div.info:not(#dialog) p:first-child, div.warn:not(#dialog) p:first-child, div.error:not(#dialog) p:first-child {
   font-size: 1.5rem;
   font-weight: 900;
   border-bottom: 2px solid var(--text-color);
 }
 
-div.info {
+div.info:not(#dialog) {
   background-color: var(--info-bg-color);
 }
 
-div.warn {
+div.warn:not(#dialog) {
   background-color: var(--warn-bg-color);
 }
 
-div.error {
+div.error:not(#dialog) {
   background-color: var(--error-bg-color);
+}
+
+/* テーブル */
+table {
+  border-collapse: collapse;
+  background-color: white;
+  margin: 0.25rem;
+  table-layout: fixed;
+  width: calc(100% - 0.5rem);
+}
+
+th {
+  background-color: var(--sub-color);
+}
+
+tr:nth-child(2n) {
+  background-color: rgba(192, 255, 192, 0.5);
 }
 
 /* for smartphone */
