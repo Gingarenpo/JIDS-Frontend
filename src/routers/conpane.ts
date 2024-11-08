@@ -36,6 +36,12 @@ export default {
             component: () => import("../pages/conpane/Me.vue"),
         },
 
+        {
+            path: "/conpane/jae",
+            name: "conpaneJae",
+            component: () => import("../pages/conpane/JAE.vue"),
+        },
+
         // Not Found
         {
             path: "/conpane/:pathMatch(.*)*",

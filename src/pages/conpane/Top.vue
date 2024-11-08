@@ -56,10 +56,10 @@
             <p>全国の交差点の予備調査を行うことができます。<br>専用のツールを用意しています。</p>
         </RouterLink></div>
 
-        <div><RouterLink to="/conpane/help">
-            <i class="fa-solid fa-circle-question"></i>
-            <p>ヘルプ</p>
-            <p>わからないことはこちらで解決できます。<br>お問い合わせもこちらから。</p>
+        <div><RouterLink to="/conpane/jae">
+            <i class="fa-solid fa-terminal"></i>
+            <p>JIDS API Explorer</p>
+            <p>APIの利用方法の確認や、<br>実際の実行を行うことができます。</p>
         </RouterLink></div>
 
         <div :class="{disabled: (json !== null && json.user_rank != -1)}"><RouterLink to="/conpane/admin">

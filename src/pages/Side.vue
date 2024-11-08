@@ -6,6 +6,7 @@
         <ul>
             <li><RouterLink to="/pref">都道府県から探す</RouterLink></li>
             <li><RouterLink to="/map">地図から探す</RouterLink></li>
+            <li><RouterLink to="/conpane">コントロールパネル</RouterLink></li>
         </ul>
     </section>
 </template>
