@@ -42,6 +42,12 @@ export default {
             component: () => import("../pages/conpane/JAE.vue"),
         },
 
+        {
+            path: "/conpane/queue/:id",
+            name: "conpaneQueue",
+            component: () => import("../pages/conpane/Queue.vue"),
+        },
+
         // Not Found
         {
             path: "/conpane/:pathMatch(.*)*",

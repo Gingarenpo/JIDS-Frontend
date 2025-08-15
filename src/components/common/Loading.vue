@@ -17,7 +17,7 @@
         message.value = "あまりにも時間がかかりすぎています……";
     }, props.timeout * 2);
     setTimeout(() => {
-        message.value = "エラーが発生している可能性があります……";
+        message.value = "エラーが発生している可能性があります。再読み込みを検討してください。";
     }, props.timeout * 3);
 
 </script>

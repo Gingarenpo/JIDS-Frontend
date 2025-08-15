@@ -1,5 +1,6 @@
 <script lang="ts" setup>
     import IntersectionBox from '../components/IntersectionBox.vue';
+    import GoogleMap from '../components/common/GoogleMap.vue';
     import axios from 'axios';
     import { onMounted, onUpdated, ref, watch } from 'vue';
     import { setHeader } from '../helpers/helpers';
@@ -105,49 +106,58 @@
 </script>
 
 <template>
-    <Loading v-if="!intersection" message="交差点情報を取得しています…"/>
-    <h2 v-if="intersection">[{{ intersection.prefId }}-{{ intersection.areaId }}-{{ intersection.id }}]{{ intersection.name }}</h2>
-    <IntersectionBox v-if="intersection && area && intersection.status in {LIVE: true, GONE: true, MERGE: true}" :intersection="intersection" :area="area" />
-    <div v-if="intersection && intersection.status == 'MOVE'">
-        <p>この交差点は移管されました。<RouterLink :to="`/${intersection.prefId}/${intersection.areaId}`">エリアページに戻る</RouterLink></p>
-    </div>
-    <div v-if="intersection && intersection.details.length > 0">
-        <div class="tabs">
-            <div v-for="(d, i) in intersection.details" :class="{selected: d == detail}" @click="detail = intersection.details[i]">{{ formatDate(d.takeDate) }}</div>
+    <div>
+        <Loading v-if="!intersection" message="交差点情報を取得しています…"/>
+        <h2 v-if="intersection">[{{ intersection.prefId }}-{{ intersection.areaId }}-{{ intersection.id }}]{{ intersection.name }}</h2>
+        <IntersectionBox v-if="intersection && area && intersection.status in {LIVE: true, GONE: true, MERGE: true}" :intersection="intersection" :area="area" />
+        <GoogleMap :intersection="intersection" />
+        <div v-if="intersection && intersection.status == 'MOVE'">
+            <p>この交差点は移管されました。<RouterLink :to="`/${intersection.prefId}/${intersection.areaId}`">エリアページに戻る</RouterLink></p>
         </div>
-    </div>
-    <div v-if="intersection && detail" class="tab-contents">
-        <h3>車灯</h3>
-        <div class="box">
-            <div v-for="picture in detail.pictures.S" ref="S" :data-max="picture.length" :data-now="0">
-                <h3>{{ picture[0].number }}</h3>
-                <p>{{ console.log($event) }}</p>
-                <img :src="picture[0].url" @click="clickImage($event, picture)" />
+        <div v-if="intersection && intersection.status == 'UNKNOWN'">
+            <p>この交差点は過去に存在したものの、情報がなく行方不明です。</p>
+        </div>
+        <div v-if="intersection && intersection.details.length == 0">
+            <p>この交差点はまだ現地調査がされていないため、予備調査情報のみを掲載します。</p>
+        </div>
+        <div v-if="intersection && intersection.details.length > 0">
+            <div class="tabs">
+                <div v-for="(d, i) in intersection.details" :class="{selected: d == detail}" @click="detail = intersection.details[i]">{{ formatDate(d.takeDate) }}</div>
             </div>
         </div>
-        <h3>歩灯</h3>
-        <div class="box">
-            <div v-for="picture in detail.pictures.H" :data-max="picture.length" :data-now="0">
-                <h3>{{ picture[0].number }}</h3>
-                <p>{{ console.log($event) }}</p>
-                <img :src="picture[0].url" @click="clickImage($event, picture)" />
+        <div v-if="intersection && detail" class="tab-contents">
+            <h3>車灯</h3>
+            <div class="box">
+                <div v-for="picture in detail.pictures.S" ref="S" :data-max="picture.length" :data-now="0">
+                    <h3>{{ picture[0].number }}</h3>
+                    <p>{{ console.log($event) }}</p>
+                    <img :src="picture[0].url" @click="clickImage($event, picture)" />
+                </div>
             </div>
-        </div>
-        <h3>制御機</h3>
-        <div class="box">
-            <div v-for="picture in detail.pictures.M" :data-max="picture.length" :data-now="0">
-                <h3>{{ picture[0].number }}</h3>
-                <p>{{ console.log($event) }}</p>
-                <img :src="picture[0].url" @click="clickImage($event, picture)" />
+            <h3>歩灯</h3>
+            <div class="box">
+                <div v-for="picture in detail.pictures.H" :data-max="picture.length" :data-now="0">
+                    <h3>{{ picture[0].number }}</h3>
+                    <p>{{ console.log($event) }}</p>
+                    <img :src="picture[0].url" @click="clickImage($event, picture)" />
+                </div>
             </div>
-        </div>
-        <h3>機械類</h3>
-        <h3>その他</h3>
-        <div class="box">
-            <div v-for="picture in detail.pictures.O" :data-max="picture.length" :data-now="0">
-                <h3>{{ picture[0].number }}</h3>
-                <p>{{ console.log($event) }}</p>
-                <img :src="picture[0].url" @click="clickImage($event, picture)" />
+            <h3>制御機</h3>
+            <div class="box">
+                <div v-for="picture in detail.pictures.M" :data-max="picture.length" :data-now="0">
+                    <h3>{{ picture[0].number }}</h3>
+                    <p>{{ console.log($event) }}</p>
+                    <img :src="picture[0].url" @click="clickImage($event, picture)" />
+                </div>
+            </div>
+            <h3>機械類</h3>
+            <h3>その他</h3>
+            <div class="box">
+                <div v-for="picture in detail.pictures.O" :data-max="picture.length" :data-now="0">
+                    <h3>{{ picture[0].number }}</h3>
+                    <p>{{ console.log($event) }}</p>
+                    <img :src="picture[0].url" @click="clickImage($event, picture)" />
+                </div>
             </div>
         </div>
     </div>

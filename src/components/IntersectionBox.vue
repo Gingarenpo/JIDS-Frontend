@@ -58,7 +58,7 @@ import noImage from '../assets/images/noimage.jpg';
 </script>
 
 <template>
-    <RouterLink :to="`/${props.intersection.prefId}/${props.intersection.areaId}/${props.intersection.id}`" class="no-link">
+    <RouterLink :to="`/${props.intersection.prefId}/${props.intersection.areaId}/${props.intersection.id}`" class="no-link" target="_blank">
         <div class="flex" :class="
             {
                 'detail': props.intersection.details.length > 0,
@@ -190,16 +190,20 @@ import noImage from '../assets/images/noimage.jpg';
         font-size: 1rem;
         line-height: 0.8rem;
     }
-    .info-intersection div p:nth-child(2), .info div p:nth-child(2) span:not(.city):not(.group) {
+    .info-intersection div p:nth-child(2), .info div p:nth-child(2)  {
         font-size: 2rem;
         font-weight: 900;
     }
+
+    .info-intersection div p:nth-child(2) span {
+        font-size: inherit;
+    }
     .city {
         display: block;
-        font-size: 1.2rem;
+        font-size: 1.4rem !important;
     }
     .city .group {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
 
     @media screen and (max-width: 800px) {

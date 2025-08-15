@@ -61,6 +61,10 @@ export async function axiosWithJWTToken(type: string,url:string, param?:object, 
         });
     }
     catch (e:any) {
+        if (e.response == undefined) {
+            // そもそものエラー
+            console.error(e);
+        }
         if (e.response.status == 401) {
             // 再トークン払い出し
             console.debug("※トークンの期限切れ。再発行します");

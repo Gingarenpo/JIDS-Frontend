@@ -7,6 +7,7 @@
     import { axiosWithJWTToken, formatByte } from '../../helpers/helpers';
     import Loading from '../../components/common/Loading.vue';
     import { useRouter } from 'vue-router';
+import BackConpane from '../../components/common/BackConpane.vue';
 
     // はじめにフラグ
     const done = ref(false);
@@ -188,6 +189,8 @@
             </div>
         </Dialog>
     </div>
+
+    <BackConpane />
 
 </template>
 

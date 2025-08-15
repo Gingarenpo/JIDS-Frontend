@@ -5,6 +5,7 @@
     import Loading from '../../components/common/Loading.vue';
     import { useRouter } from 'vue-router';
     import Dialog from '../../components/common/Dialog.vue';
+import BackConpane from '../../components/common/BackConpane.vue';
 
 
     // 自分自身の情報を取得する
@@ -59,6 +60,12 @@
         })
     }
 
+    // ログアウトしてログイン画面に遷移する
+    function logout_() {
+        logout();
+        router.push({ name: "conpaneLogin" });
+    }
+
 </script>
 
 <template>
@@ -77,6 +84,7 @@
             </ul>
         </div>
         <p><label>ユーザーID</label><input type="text" :value="me.id" disabled></p>
+        <p><i class="fa-solid fa-circle-info"></i>現在、あなたは<b>{{ me.rank.name }}</b>です。</p>
         <p><i class="fa-solid fa-circle-xmark"></i>ユーザーIDを変更することはできません。どうしても変更を希望される場合は、管理者に連絡してください。</p>
 
         <form @submit="update" name="form">
@@ -84,7 +92,7 @@
             <p><label>連絡先</label><input type="text" :value="me.address" name="address"></p>
 
             <hr>
-            <p><i class="fa-solid fa-circle-exclamation"></i>現在のパスワードは表示することができません。パスワードを変更する場合は以下に新しいパスワードを入力してください。</p>
+            <p><i class="fa-solid fa-circle-exclamation"></i>現在のパスワードは表示することができません。パスワードを変更する場合は以下に新しいパスワードを入力してください。変更しない場合は空欄にしてください。</p>
             <p><label>新しいパスワード</label><input type="password" name="password"></p>
             <p><label>新しいパスワード(確認用)</label><input type="password" name="password2"></p>
 
@@ -94,7 +102,7 @@
 
     <Dialog title="更新完了" v-if="doneRef">
         <p>更新が完了しました。ダイアログを閉じるとログアウトするので再度ログインをお願いいたします。</p>
-        <button @click="logout">OK</button>
+        <button @click="logout_">OK</button>
     </Dialog>
 
     <div v-if="queue">
@@ -105,18 +113,23 @@
                 <th width="40%">キューID</th>
                 <th width="10%">作成日時</th>
                 <th width="10%">審査日時</th>
-                <th width="20%">審査コメント</th>
+                <th width="20%">審査結果・コメント</th>
                 <th width="20%">ユーザーコメント</th>
             </tr>
-            <tr v-for="q in queue">
-                <td>{{ q.id }}</td>
+            <tr v-for="q in queue" v-if="queue.length > 0">
+                <td><RouterLink :to="`/conpane/queue/${q.id}`">{{ q.id }}</RouterLink></td>
                 <td>{{ formatDate(q.createDate) }}</td>
                 <td>{{ formatDate(q.acceptDate) ?? formatDate(q.acceptDate) ?? "-" }}</td>
-                <td>{{ q.statusComment ?? "現在審査待ち" }}</td>
+                <td>【{{(q.acceptDate ? "承認済み" : (q.deniedDate ? "拒否済み" : "承認待ち")) }}】{{ q.statusComment ?? "コメントなし" }}</td>
                 <td>{{ q.comment }}</td>
+            </tr>
+            <tr v-else>
+                <td colspan="5">現在、送信されているキューはありません。</td>
             </tr>
         </table>
     </div>
+
+    <BackConpane />
 </template>
 
 <style scoped>

@@ -62,31 +62,34 @@ axios.get(import.meta.env.PUBLIC_SERVER_ROOT + "/" + route.params.pref + "?withA
 </script>
 
 <template>
-    <Loading v-if="!pref" message="都道府県情報を読み込んでいます……"/>
-    <div class="meta" v-if="pref && areas.length > 0">
-        <h2>{{ pref.name }}</h2>
-        <p>{{ pref.name }}の交差点情報を検索することができます。</p>
+    <div>
+        <Loading v-if="!pref" message="都道府県情報を読み込んでいます……"/>
+        <div class="meta" v-if="pref && areas.length > 0">
+            <h2>{{ pref.name }}</h2>
+            <p>{{ pref.name }}の交差点情報を検索することができます。</p>
 
-        <h3>地図から探す</h3>
-        <Loading v-if="!done" message="地図の読み込みを行っています…"></Loading>
-        <Map :intersections="intersections" :pref="pref" v-if="done"></Map>
+            <h3>地図から探す</h3>
+            <Loading v-if="!done" message="地図の読み込みを行っています…"></Loading>
+            <Map :intersections="intersections" :pref="pref" v-if="done"></Map>
 
-        <h3>エリアから探す</h3>
-        <AreaBox v-for="area in areas" :area="area" :pref="pref" />
+            <h3>エリアから探す</h3>
+            <RouterLink :to="`/pref`" v-if="pref">都道府県一覧に戻る</RouterLink>
+            <AreaBox v-for="area in areas" :area="area" :pref="pref" />
 
-        <RouterLink :to="`/${pref.id}`" v-if="pref">都道府県一覧に戻る</RouterLink>
+            
+        </div>
+        <div class="meta" v-if="pref && areas.length == 0">
+            <h2>Not Available</h2>
+            <p>大変申し訳ございません。{{ pref.name }}の情報は現在閲覧することができません。これには、以下の原因が考えられます。</p>
+            <ul>
+                <li>交差点管理方式が不明なため、データベースの整備ができません。</li>
+                <li>エリア情報の整備を行っています。</li>
+                <li>何らかのデータの不整合により一時的に正しい情報が表示されなくなっています。</li>
+            </ul>
+            <p>{{ pref.name }}の情報について何かお分かりのことなどある場合は、お手数をおかけしますが最高管理者までご連絡いただければ幸いです。</p>
+        </div>
+        <RouterLink :to="`/pref`" v-if="pref">都道府県一覧に戻る</RouterLink>
     </div>
-    <div class="meta" v-if="pref && areas.length == 0">
-        <h2>Not Available</h2>
-        <p>大変申し訳ございません。{{ pref.name }}の情報は現在閲覧することができません。これには、以下の原因が考えられます。</p>
-        <ul>
-            <li>交差点管理方式が不明なため、データベースの整備ができません。</li>
-            <li>エリア情報の整備を行っています。</li>
-            <li>何らかのデータの不整合により一時的に正しい情報が表示されなくなっています。</li>
-        </ul>
-        <p>{{ pref.name }}の情報について何かお分かりのことなどある場合は、お手数をおかけしますが最高管理者までご連絡いただければ幸いです。</p>
-    </div>
-    <RouterLink :to="`/${pref.id}`" v-if="pref">都道府県一覧に戻る</RouterLink>
 </template>
 
 <style scoped></style>

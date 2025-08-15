@@ -3,7 +3,7 @@
     import {ref, onMounted, nextTick, computed} from 'vue';
     import anime from 'animejs';
     import axios from 'axios';
-import Loading from '../components/common/Loading.vue';
+    import Loading from '../components/common/Loading.vue';
 
     setHeader(undefined, "JIDSは、日本全国の交差点を検索することができるサイトです。このサイトは、皆様の情報提供により支えられています。", "JIDS,交差点,信号機,検索,交通信号機");
 
@@ -65,7 +65,8 @@ import Loading from '../components/common/Loading.vue';
 </script>
 
 <template>
-    <h2>Welcome to JIDS!</h2>
+    <div>
+        <h2>Welcome to JIDS!</h2>
     <p>JIDSは、日本全国の交差点情報を管理・検索することができるシステムです。交差点情報は皆さまの情報提供によって拡充されます。</p>
     <p>信号機ファンが信号機ファンのために用意したシステムですが、勿論信号機ファンでなくても役に立つ場面はあるかもしれません。</p>
     <p>システムに関する詳しい説明は<RouterLink to="/about">こちら</RouterLink>からご覧いただけます。</p>
@@ -123,28 +124,28 @@ import Loading from '../components/common/Loading.vue';
 
     <h3>あなたの力を必要としています</h3>
     <p>このシステムは情報提供、システム保守・開発協力を積極的に受け付けております。規模が大きくなるにつれて個人での管理がかなり厳しくなってきているので、協力したい！という方はお気軽に参加してください！</p>
-
-    <div id="links" class="box">
-        <a href="https://github.com/gingarenpo/JIDS-Frontend" target="_blank" class="no-link">
-            <div>
-                <i class="fa-brands fa-github"></i>
+        <div id="links" class="box">
+            <a href="https://github.com/gingarenpo/JIDS-Frontend" target="_blank" class="no-link">
                 <div>
-                    <p>JIDSの開発に協力していただける方</p>
-                    <p>ソースコードはGitHubにて公開しています。<br>NodeJSを使用して構築されています。</p> 
+                    <i class="fa-brands fa-github"></i>
+                    <div>
+                        <p>JIDSの開発に協力していただける方</p>
+                        <p>ソースコードはGitHubにて公開しています。<br>NodeJSを使用して構築されています。</p> 
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
 
-        <RouterLink to="/conpane" class="no-link">
-            <div>
-                <i class="fa-solid fa-gear"></i>
+            <RouterLink to="/conpane" class="no-link">
                 <div>
-                    <p>情報提供をしていただける方</p>
-                    <p>各種操作ができるコントロールパネルを用意しています。</p>
-                    <p>このボックスをクリックするか、メニューから「コントロールパネル」をクリックすると遷移します。</p> 
+                    <i class="fa-solid fa-gear"></i>
+                    <div>
+                        <p>情報提供をしていただける方</p>
+                        <p>各種操作ができるコントロールパネルを用意しています。</p>
+                        <p>このボックスをクリックするか、メニューから「コントロールパネル」をクリックすると遷移します。</p> 
+                    </div>
                 </div>
-            </div>
-        </RouterLink>
+            </RouterLink>
+        </div>
     </div>
 </template>
 
@@ -152,7 +153,7 @@ import Loading from '../components/common/Loading.vue';
     .box {
         display: flex;
         justify-content: flex-start;
-        align-items: center;
+        /*align-items: center;*/
         width: calc(100% - 1rem);
         margin: 0.5rem;
         flex-wrap: wrap;
@@ -161,7 +162,7 @@ import Loading from '../components/common/Loading.vue';
     .box > div, .box > a > div, .box > Routerlink > div {
         display: flex;
         justify-content: flex-start;
-        align-items: center;
+        align-items: stretch;
         border: 1px solid gray;
         background-color: white;
         margin: 0.5rem;
@@ -170,6 +171,7 @@ import Loading from '../components/common/Loading.vue';
     }
 
     .box > a {
+        align-items: stretch;
         flex-basis: 31%;
         margin: 0.5rem;
         padding: 0.25rem;
