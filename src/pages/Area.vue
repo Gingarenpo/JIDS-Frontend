@@ -3,8 +3,7 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { setHeader } from '../helpers/helpers';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
-import Loading from '../components/common/Loading.vue';
-import IntersectionBox from '../components/IntersectionBox.vue';
+import SearchResult from '../components/common/SearchResult.vue';
 
 
 // ルーターパラメータを取得（こうしないとthisが使えない）
@@ -38,19 +37,9 @@ axios.get(import.meta.env.PUBLIC_SERVER_ROOT + "/" + route.params.pref + "/" + r
 </script>
 
 <template>
-    <h2 v-if="area">【{{area.pref.name}}】{{area.name}}{{area.pref.manage == 'POLICE' ? '警察署' : ''}}</h2>
-    <Loading v-if="intersections.length == 0" message="交差点一覧を読み込んでいます…"/>
-    <div  v-if="intersections.length > 0">
-        <RouterLink :to="`/${area.pref.id}`"><p>都道府県ページに戻る</p></RouterLink>
-        <h3>交差点一覧</h3>
-        <p><span class="count">{{ intersections.length.toLocaleString() }}</span>交差点が見つかりました。</p>
-        <IntersectionBox v-for="intersection in intersections" :intersection="intersection" :area="area"/>
-    </div>
+    <SearchResult :intersections="intersections" :area="area" />
 </template>
 
 <style scoped>
-    .count {
-        font-size: 2rem;
-        font-weight: 900;
-    }
+
 </style>

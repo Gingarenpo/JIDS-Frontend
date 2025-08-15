@@ -8,23 +8,26 @@ import { useTokenStore } from './store';
 </script>
 
 <template>
-  <header>
-    <h1><RouterLink to="/" class="no-link">JIDS</RouterLink></h1>
-  </header>
-  <div id="container">
-    <main>
-      <router-view v-slot="{ Component }">
-          <component :is="Component" />
-      </router-view>
-    </main>
-    <div id="side">
-      <Side/>
+  <div>
+    <header>
+      <h1><RouterLink to="/" class="no-link">JIDS</RouterLink></h1>
+    </header>
+    <div id="container">
+      <main>
+        <router-view v-slot="{ Component }">
+            <component :is="Component" />
+        </router-view>
+      </main>
+      <div id="side">
+        <Side/>
+      </div>
     </div>
+    <footer>
+      <p>&copy; 2024-2025 Gingarenpo. All rights reserved.</p>
+      <p v-if="json">ようこそ、<RouterLink to="/conpane">{{json.user_name}}</RouterLink>さん</p>
+      <p v-else>情報提供者ですか？ <RouterLink to="/conpane">ログインしてください。</RouterLink></p>
+    </footer>
   </div>
-  <footer>
-    <p>&copy; 2024 Gingarenpo. All rights reserved.</p>
-    <p v-if="json">ようこそ、<RouterLink to="/conpane">{{json.user_name}}</RouterLink>さん</p>
-  </footer>
 </template>
 
 <style scoped>

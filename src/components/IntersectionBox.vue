@@ -17,9 +17,10 @@ import noImage from '../assets/images/noimage.jpg';
             if (m != null) {
                 return m[1];
             }
-            m = props.intersection.comment.match(/(.+署)(?:へ|に)移管/);
+            // XX署DD（番）(へ|に)移管、とあればその中身になる
+            m = props.intersection.comment.match(/(?:(.+?)署?)(?:(\d+?)番?)?(?:へ|に)移管/);
             if (m != null) {
-                return m[1];
+                return m[1]+"-"+m[2];
             }
             return 'どこか';
         }
@@ -55,6 +56,31 @@ import noImage from '../assets/images/noimage.jpg';
         return "不明";
     })
 
+    // サムネイル提供者
+    const thumbnailUser = computed(() => {
+        if (props.intersection.thumbnails.length > 0) {
+            return props.intersection.thumbnails[0].queue.user.name;
+        }
+    })
+
+    // 更新年度
+    const refYear = computed(() => {
+        if (props.intersection.refreshYear != null) {
+            return (props.intersection.refreshYear != props.intersection.operationYear) ?[props.intersection.refreshYear] : ["-"]; // 更新年度が既に存在していればそれを使う
+        }
+        else {
+            // 更新年度が存在しない場合、備考欄から「YYYY～YYYY」を見つけてそれを使う
+            const m = props.intersection.comment?.match(/(\d{4})～(\d{4})(更新|廃止)/);
+            if (m != null) {
+                return [m[1], m[2]];
+            }
+            else {
+                // どうしようもないので「不明」
+                return ["不明"];
+            }
+        }
+    })
+
 </script>
 
 <template>
@@ -77,7 +103,7 @@ import noImage from '../assets/images/noimage.jpg';
                     </div>
                     <div>
                         <p>{{ props.intersection.status == 'GONE' || props.intersection.status == 'MERGE' ? '廃止' : '更新'}}年度</p>
-                        <p>{{ (props.intersection.operationYear == props.intersection.refreshYear && props.intersection.operationYear != null) ? '-' : props.intersection.refreshYear ?? '不明' }}</p>
+                        <p>{{ refYear[0] }}<br v-if="refYear[1] != null"><span v-if="refYear[1]">～</span>{{ refYear[1] }}</p>
                     </div>
                     <div>
                         <p>状態</p>
@@ -93,10 +119,11 @@ import noImage from '../assets/images/noimage.jpg';
                     </div>
                     <div>
                         <p>歩灯構成</p>
-                        <p v-html="props.intersection.peds.length == 0 ? `不明` : props.intersection.peds.join(`<br>`)"></p>
+                        <p v-html="props.intersection.peds.length == 0 ? `-` : props.intersection.peds.join(`<br>`)"></p>
                     </div>
                 </div>
-                <hr v-if="props.intersection.comment">
+                <hr v-if="props.intersection.comment || thumbnailUser">
+                <p v-if="thumbnailUser">サムネイル: <span class="thumbnail-user">{{ thumbnailUser }}</span></p>
                 <p>{{ props.intersection.comment }}</p>
             </div>
         </div>
@@ -204,6 +231,9 @@ import noImage from '../assets/images/noimage.jpg';
     }
     .city .group {
         font-size: 2rem;
+    }
+    .thumbnail-user {
+        font-weight: 900;
     }
 
     @media screen and (max-width: 800px) {

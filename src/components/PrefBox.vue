@@ -17,7 +17,7 @@
             return props.pref.name + "は交差点情報が1件も登録されていません。あなたが最初の予備調査者になってみませんか？";
         }
         else if (props.pref.search_count / props.pref.all_count < 0.1) {
-            return props.pref.name + "の交差点情報が不足しています。あなたが最初の予備調査者になってみませんか？";
+            return props.pref.name + "の交差点情報が不足しています。予備調査者になってみませんか？";
         }
         else if (props.pref.thumbnail_count == 0) {
             return props.pref.name + "はサムネイルが1件も登録されていません。交差点画像をお持ちですか？";

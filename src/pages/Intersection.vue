@@ -126,6 +126,11 @@
             </div>
         </div>
         <div v-if="intersection && detail" class="tab-contents">
+            <div class="info">
+                <p>調査情報</p>
+                <p>調査者:<b>{{ detail.queue.user.name }}</b></p>
+                <p v-if="detail.memo">調査メモ:{{ detail.memo }}</p>
+            </div>
             <h3>車灯</h3>
             <div class="box">
                 <div v-for="picture in detail.pictures.S" ref="S" :data-max="picture.length" :data-now="0">
