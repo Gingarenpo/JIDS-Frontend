@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { ref } from 'vue';
 import Dialog from '../../components/common/Dialog.vue';
+import { setHeader } from '../../helpers/helpers';
 
 const error = ref(null);
 const res = ref(null);
@@ -23,6 +24,8 @@ function checkData(e: Event) {
             document.getElementById("error")?.scrollTo({behavior: "smooth"});
         }
     });
+
+    setHeader("新規アカウント作成", "日本全国の信号機に関する情報を、交差点から探すことができます。", "交差点,信号機,検索,交通信号機");
 }
 </script>
 

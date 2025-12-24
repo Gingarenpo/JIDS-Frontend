@@ -137,3 +137,19 @@ export function formatDate(date: String): string | null {
 export function isMobile(): boolean {
     return window.matchMedia && window.matchMedia("(max-width: 800px)").matches;
 }
+
+// アクセス権限を持っているかどうか確認するためのもの
+// 指定したランクを基に判断
+
+export async function isAccessible(rank:number = -1): boolean {
+    const store = useTokenStore();
+    const res = await axiosWithJWTToken("get", import.meta.env.PUBLIC_SERVER_ROOT + "/users/me");
+    if (res == null) {
+        return false;
+    }
+    console.log(res);
+
+    return new Promise((resolve, reject) => {
+        resolve(rank === -1 ? res.data.rankId === -1 : res.data.rankId >= rank);
+    });
+}

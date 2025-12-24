@@ -1,14 +1,13 @@
 <script lang="ts" setup>
     import { computed, ref } from 'vue';
     import { axiosWithJWTToken, getDataFromJWT, isMobile } from '../../helpers/helpers';
-    import { logout as logout2 } from '../../helpers/helpers';
+    import { logout as logout2, setHeader } from '../../helpers/helpers';
     import { useRouter } from 'vue-router';
     import { useTokenStore } from '../../store';
 
 
     const store = useTokenStore();
     const router = useRouter();
-    console.log(store);
 
     // JSONトークンを取得
     const json = computed(() => getDataFromJWT(store.token));
@@ -24,7 +23,9 @@
     // モバイル？
     const mobile = computed(() => {
         return isMobile();
-    })
+    });
+
+    setHeader("コントロールパネル", "日本全国の信号機に関する情報を、交差点から探すことができます。", "交差点,信号機,検索,交通信号機");
 
 
     

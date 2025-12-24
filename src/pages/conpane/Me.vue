@@ -1,7 +1,7 @@
 <script lang="ts" setup>
     import { computed, ref } from 'vue';
     import { useTokenStore } from '../../store';
-    import { axiosWithJWTToken, formatDate, logout } from '../../helpers/helpers';
+    import { axiosWithJWTToken, formatDate, logout, setHeader } from '../../helpers/helpers';
     import Loading from '../../components/common/Loading.vue';
     import { useRouter } from 'vue-router';
     import Dialog from '../../components/common/Dialog.vue';
@@ -19,6 +19,7 @@ import BackConpane from '../../components/common/BackConpane.vue';
             router.push("/conpane/login");
         }
         me.value = response.data;
+        setHeader(me.value.name, "日本全国の信号機に関する情報を、交差点から探すことができます。", "交差点,信号機,検索,交通信号機");
     });
     const errorMessages = ref([]);
 
@@ -31,6 +32,7 @@ import BackConpane from '../../components/common/BackConpane.vue';
             router.push("/conpane/login");
         }
         queue.value = response.data;
+        
     })
 
     // フォーム更新
@@ -65,6 +67,8 @@ import BackConpane from '../../components/common/BackConpane.vue';
         logout();
         router.push({ name: "conpaneLogin" });
     }
+
+    
 
 </script>
 

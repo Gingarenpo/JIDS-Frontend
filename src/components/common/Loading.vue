@@ -3,22 +3,23 @@
     // Props
     const props = defineProps({
         message: { type: String, default: "Now Loading" },
-        timeout: { type: Number, default: 5000 },
+        timeout: { type: String, default: 5000 },
     }); // あくまでデフォルト
 
     // メッセージを格納するref
     const message = ref(props.message);
+    const timeout = parseInt(props.timeout);
 
     // Loadingアイコンはタイムアウト時間を超えたら文言を変える
     setTimeout(() => {
         message.value = "ちょっと時間がかかっているようです……";
-    }, props.timeout * 1);
+    }, timeout * 1);
     setTimeout(() => {
         message.value = "あまりにも時間がかかりすぎています……";
-    }, props.timeout * 2);
+    }, timeout * 2);
     setTimeout(() => {
         message.value = "エラーが発生している可能性があります。再読み込みを検討してください。";
-    }, props.timeout * 3);
+    }, timeout * 3);
 
 </script>
 

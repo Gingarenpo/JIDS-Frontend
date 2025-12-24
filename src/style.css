@@ -25,6 +25,9 @@
   --warn-bg-color: #ffffaa;
   --error-color: #ff0000;
   --error-bg-color: #ffa0a0;
+
+  --accept-color: #00ff0020;
+  --reject-color: #ff808020;
 }
 
 * {
@@ -124,6 +127,15 @@ a {
   font-size: inherit;
 }
 
+em {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+ul {
+  margin-left: 1rem;
+}
+
 /* ヘッダー */
 header {
   display: flex;
@@ -174,6 +186,14 @@ footer {
 .flex {
   display: flex;
   justify-content: space-between;
+}
+
+/* 主にflex boxの中で使用する装飾済みボックス */
+.flex > div.box {
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  background-color: white;
 }
 
 /* Dialog box */

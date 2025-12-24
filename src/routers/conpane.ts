@@ -48,6 +48,18 @@ export default {
             component: () => import("../pages/conpane/Queue.vue"),
         },
 
+        {
+            path: "/conpane/admin/queues",
+            name: "conpaneQueues",
+            component: () => import("../pages/conpane/admin/Queues.vue"),
+        },
+
+        {
+            path: "/conpane/admin",
+            name: "conpaneAdmin",
+            component: () => import("../pages/conpane/Admin.vue"),
+        },
+
         // Not Found
         {
             path: "/conpane/:pathMatch(.*)*",

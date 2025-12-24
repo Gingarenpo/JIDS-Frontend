@@ -4,7 +4,7 @@
     import { useUploadStore } from '../../store';
     import Dialog from '../../components/common/Dialog.vue';
     import axios, { AxiosProgressEvent } from 'axios';
-    import { axiosWithJWTToken, formatByte } from '../../helpers/helpers';
+    import { axiosWithJWTToken, formatByte, setHeader } from '../../helpers/helpers';
     import Loading from '../../components/common/Loading.vue';
     import { useRouter } from 'vue-router';
 import BackConpane from '../../components/common/BackConpane.vue';
@@ -111,6 +111,8 @@ import BackConpane from '../../components/common/BackConpane.vue';
     function closeDialog(e) {
         uploadFlag.value = 0;
     }
+
+    setHeader("アップロードする", "日本全国の信号機に関する情報を、交差点から探すことができます。", "交差点,信号機,検索,交通信号機");
 </script>
 
 <template>
@@ -148,7 +150,7 @@ import BackConpane from '../../components/common/BackConpane.vue';
         <p>※一度すでにキューの作り方を閲覧しているのでいきなりアップロード画面を表示しています。もう一度見返したい方は<a @click="unread" style="text-decoration: underline;">こちら</a>をクリックしてください。</p>
         <h2 id="upload">Zipファイルのアップロード</h2>
         
-        <p>Zipファイルは<b>4GB</b>までのファイルをアップロードすることができます。</p>
+        <p>Zipファイルは<b>4GB</b>までのファイルをアップロードすることができますが、回線速度によってはアップロードに失敗する可能性もあります。</p>
         <form name="form" @submit="upload">
             <input type="file" name="file" accept="application/zip" required>
             <p>必要ならばコメントを入力してください。この情報は最高管理者とあなたしか閲覧できません。</p>
