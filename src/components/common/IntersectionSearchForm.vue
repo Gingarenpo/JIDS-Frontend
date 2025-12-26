@@ -219,6 +219,7 @@
             if (e.response.data.error == "検索結果が多すぎます。") {
                 errorDetail.value = "検索結果が" + e.response.data.count + "件と大量になっています。もう少し絞り込んでください。";
             }
+            emit("search", null);
         })
         .finally(() => {
             searching.value = false;
@@ -297,7 +298,7 @@
         </div>
     </div>
     <div class="search-form" v-else>
-        <Loading message="検索中…" />
+        <Loading message="検索中…" timeout="25000" />
     </div>
 </template>
 
