@@ -5,6 +5,7 @@
         <h2>メニュー</h2>
         <ul>
             <li><RouterLink to="/pref">都道府県から探す</RouterLink></li>
+            <li><RouterLink to="/search">詳細に探す</RouterLink></li>
             <li><RouterLink to="/map">地図から探す</RouterLink></li>
             <li><RouterLink to="/conpane">コントロールパネル</RouterLink></li>
         </ul>

@@ -36,7 +36,7 @@ export function getDataFromJWT(jwt:string): object | null {
  */
 export async function axiosWithJWTToken(type: string,url:string, param?:object, retryCount = 0, obj?:object): Promise<object|null> {
     const store = useTokenStore();
-    console.log(store.token);
+    //console.log(store.token);
     if (retryCount == 3) {
         return null; // 無理
     }
@@ -147,7 +147,6 @@ export async function isAccessible(rank:number = -1): boolean {
     if (res == null) {
         return false;
     }
-    console.log(res);
 
     return new Promise((resolve, reject) => {
         resolve(rank === -1 ? res.data.rankId === -1 : res.data.rankId >= rank);

@@ -18,12 +18,12 @@ const intersections = computed(() => {
         <h2 v-if="props.title">検索結果: {{ props.title }}</h2>
         <Loading v-if="intersections.length == 0" message="交差点一覧を読み込んでいます…"/>
         <div  v-if="intersections.length > 0">
-            <RouterLink :to="`/${area.pref.id}`"><p>都道府県ページに戻る</p></RouterLink>
+            <RouterLink v-if="props.area" :to="`/${area.pref.id}`"><p>都道府県ページに戻る</p></RouterLink>
             <h3>交差点一覧</h3>
             <p><span class="count">{{ intersections.length.toLocaleString() }}</span>交差点が見つかりました。</p>
             <SortFilterForm :model-value="intersections" @update:model-value="intersections = $event" />
             <IntersectionBox v-for="intersection in intersections" :intersection="intersection" :area="area"/>
-            <RouterLink :to="`/${area.pref.id}`"><p>都道府県ページに戻る</p></RouterLink>
+            <RouterLink v-if="props.area" :to="`/${area.pref.id}`"><p>都道府県ページに戻る</p></RouterLink>
         </div>
     </div>
 </template>

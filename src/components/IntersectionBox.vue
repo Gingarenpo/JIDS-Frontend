@@ -58,7 +58,7 @@ import noImage from '../assets/images/noimage.jpg';
 
     // サムネイル提供者
     const thumbnailUser = computed(() => {
-        if (props.intersection.thumbnails.length > 0) {
+        if (props.intersection.thumbnails != null && props.intersection.thumbnails.length > 0) {
             return props.intersection.thumbnails[0].queue.user.name;
         }
     })
@@ -88,14 +88,14 @@ import noImage from '../assets/images/noimage.jpg';
         <div class="flex" :class="
             {
                 'detail': props.intersection.details.length > 0,
-                'thumbnail': props.intersection.thumbnails.length > 0,
+                'thumbnail': props.intersection.thumbnail != null || (props.intersection.thumbnails != null && props.intersection.thumbnails.length > 0),
                 'rover': props.intersection.rover & 2,
                 'gone': props.intersection.status == 'GONE' || props.intersection.status == 'MERGE'
             }
             " v-if="props.intersection.name != null && props.intersection.status != 'MOVE'">
             <img :src="props.intersection.thumbnail ?? noImage">
             <div>
-                <h2>[{{ props.intersection.areaId }}-{{ props.intersection.id >= area.unknownStart ? '???' : props.intersection.id }}] {{ props.intersection.name }}{{ props.intersection.isOfficialName ? '' : '（仮）' }}</h2>
+                <h2>[{{ props.intersection.areaId }}-{{ props.intersection.id >= (area?.unknownStart ?? 801) ? '???' : props.intersection.id }}] {{ props.intersection.name }}{{ props.intersection.isOfficialName ? '' : '（仮）' }}</h2>
                 <div class="info-intersection">
                     <div>
                         <p>新設年度</p>
@@ -129,12 +129,12 @@ import noImage from '../assets/images/noimage.jpg';
         </div>
 
         <div class="flex move" v-if="props.intersection.status == 'MOVE'">
-            <p>[{{ props.area.id }}-{{ props.intersection.id }}] → <span class="move-to">{{ moveTo }}</span>に移管されました。</p>
+            <p>[{{ props.area ? props.area.id : props.intersection.areaId }}-{{ props.intersection.id }}] → <span class="move-to">{{ moveTo }}</span>に移管されました。</p>
         </div>
 
         <div class="flex" :class="{'unknown': props.intersection.status == 'UNKNOWN', 'disabled': props.intersection.status == 'LIVE'}" v-if="props.intersection.name == null">
             <img :src="props.intersection.thumbnail ?? noImage">
-            <p>[{{ props.area.id }}-{{ props.intersection.id }}]は{{ props.intersection.status == 'UNKNOWN' ? '過去に存在したものの、情報がなく行方不明' : '未調査・未発見' }}です。</p>
+            <p>[{{ props.area ? props.area.id : props.intersection.areaId }}-{{ props.intersection.id }}]は{{ props.intersection.status == 'UNKNOWN' ? '過去に存在したものの、情報がなく行方不明' : '未調査・未発見' }}です。</p>
         </div>
     </RouterLink>
 </template>

@@ -60,6 +60,12 @@ export default {
             component: () => import("../pages/conpane/Admin.vue"),
         },
 
+        {
+            path: "/conpane/search",
+            name: "conpaneSearch",
+            component: () => import("../pages/conpane/Search.vue"),
+        },
+
         // Not Found
         {
             path: "/conpane/:pathMatch(.*)*",

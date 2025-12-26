@@ -28,6 +28,9 @@
 
   --accept-color: #00ff0020;
   --reject-color: #ff808020;
+
+  --border-light-color: #cccccc;
+  --border-dark-color: #888888;
 }
 
 * {
@@ -134,6 +137,10 @@ em {
 
 ul {
   margin-left: 1rem;
+}
+
+small {
+  font-size: 0.75em;
 }
 
 /* ヘッダー */

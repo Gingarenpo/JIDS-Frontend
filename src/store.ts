@@ -35,3 +35,20 @@ export const useUploadStore = defineStore("upload", {
        storage: localStorage,
    }
 });
+
+export const useSearchStore = defineStore("search", {
+    state: () => ({
+        done: false,
+    }),
+    actions: {
+        read() {
+            this.done = true;
+        },
+        reRead() {
+            this.done = false;
+        }
+    },
+    persist: {
+        storage: localStorage,
+    }
+});

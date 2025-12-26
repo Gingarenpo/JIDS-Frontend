@@ -6,6 +6,12 @@ export default {
             name: "Pref",
             component: () => import("../pages/Prefs.vue"),
         },
+        // 詳細検索
+        {
+            path: "/search",
+            name: "Search",
+            component: () => import("../pages/Search.vue"),
+        },
         // 地図から検索
         {
             path: "/map",
