@@ -1,10 +1,20 @@
 <script setup lang="ts">
 import { getDataFromJWT } from './helpers/helpers';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useTokenStore } from './store';
+import Toast from './components/common/Toast.vue';
+import { registerToast } from './composables/useToast';
+
 
   const store = useTokenStore();
   const json = computed(() => getDataFromJWT(store.token));
+
+  // トーストバリュー
+  const toast = ref();
+
+  onMounted(() => {
+    registerToast(toast);
+  })
 </script>
 
 <template>
@@ -27,7 +37,10 @@ import { useTokenStore } from './store';
       <p v-if="json">ようこそ、<RouterLink to="/conpane">{{json.user_name}}</RouterLink>さん</p>
       <p v-else>情報提供者ですか？ <RouterLink to="/conpane">ログインしてください。</RouterLink></p>
     </footer>
+
+    <Toast ref="toast"/>
   </div>
+
 </template>
 
 <style scoped>
