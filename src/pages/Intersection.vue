@@ -27,7 +27,7 @@
     axios.get(import.meta.env.PUBLIC_SERVER_ROOT + "/" + route.params.pref + "/" + route.params.area + "/" + route.params.intersection + "?withDetail=true")
     .then(response => {
         intersection.value = response.data;
-        setHeader(`[${response.data.prefId}-${response.data.areaId}-${response.data.id}]「${response.data.name}」`, `「${response.data.name}」交差点の詳細情報を閲覧することができます。`);
+        setHeader(`[${response.data.prefId}-${response.data.areaId}-${response.data.id}]「${response.data.name ?? '不明'}」`, `「${response.data.name}」交差点の詳細情報を閲覧することができます。`);
 
         // デフォルトで一番最初のdetailを表示させる
         if (response.data.details.length > 0) {
@@ -64,7 +64,7 @@
             pictures[p.type][p.number].push(p);
         }
 
-        console.log(S);
+        // console.log(S);
 
         // それぞれのタイプにおいて、number > light(GYRXF) > subNumberの順番にする
         for (const key of Object.keys(pictures)) {
@@ -108,7 +108,7 @@
 <template>
     <div>
         <Loading v-if="!intersection" message="交差点情報を取得しています…"/>
-        <h2 v-if="intersection">[{{ intersection.prefId }}-{{ intersection.areaId }}-{{ intersection.id }}]{{ intersection.name }}</h2>
+        <h2 v-if="intersection">[{{ intersection.prefId }}-{{ intersection.areaId }}-{{ intersection.id }}]{{ intersection.name ?? '不明' }}</h2>
         <IntersectionBox v-if="intersection && area && intersection.status in {LIVE: true, GONE: true, MERGE: true}" :intersection="intersection" :area="area" />
         <GoogleMap :intersection="intersection" />
         <div v-if="intersection && intersection.status == 'MOVE'">

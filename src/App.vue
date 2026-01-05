@@ -13,7 +13,7 @@ import { registerToast } from './composables/useToast';
   const toast = ref();
 
   onMounted(() => {
-    registerToast(toast);
+    registerToast(toast.value);
   })
 </script>
 

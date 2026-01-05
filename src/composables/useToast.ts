@@ -1,16 +1,25 @@
-
+// useToast.ts
 import type { ComponentPublicInstance } from 'vue';
 
-let toastRef: ComponentPublicInstance | null = null;
+// Toastコンポーネントのインターフェースを定義
+interface ToastInstance extends ComponentPublicInstance {
+  show: (message: string, duration?: number) => void;
+}
 
-export function registerToast(ref: ComponentPublicInstance) {
-  toastRef = ref;
+let toastRef: ToastInstance | null = null;
+
+export function registerToast(instance: any) {
+  toastRef = instance;
 }
 
 export function useToast() {
   return {
     show(message: string, duration?: number) {
-      toastRef?.exposed?.show(message, duration);
+      if (toastRef) {
+        toastRef.show(message, duration);
+      } else {
+        console.warn("Toast instance is not registered.");
+      }
     }
   };
 }

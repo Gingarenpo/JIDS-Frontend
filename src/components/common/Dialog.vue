@@ -26,7 +26,6 @@
             <p><i :class="iconClass"></i>{{ props.title }}</p>
             <slot>Ooops</slot>
         </div>
-        <button v-if="props.showButton">OK</button>
     </div>
 </template>
 
@@ -80,7 +79,7 @@
         overflow-y: scroll;
     }
 
-    :slotted(button) {
+    :slotted(div) {
         display: block;
         margin: auto;
         width: 50%;

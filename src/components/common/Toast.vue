@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { ref } from 'vue';
 
@@ -9,6 +8,8 @@ let timer: number | null = null;
 function show(msg: string, duration = 3000) {
   message.value = msg;
   visible.value = true;
+
+  console.log("visible is now:", visible.value);
 
   if (timer !== null) {
     clearTimeout(timer);
@@ -25,7 +26,7 @@ defineExpose({ show });
 <template>
   <transition name="toast">
     <div v-if="visible" class="toast">
-      {{ message }}
+        {{ message }}
     </div>
   </transition>
 </template>

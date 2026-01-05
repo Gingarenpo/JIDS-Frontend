@@ -63,7 +63,7 @@ function getThumbnailUrl(url) {
             <p v-if="contents.thumbnails.length > 0 && contents.details.length > 0">キュー内には<em>{{ contents.thumbnails.length }}</em>件のサムネイルと、<em>{{ contents.details.length }}</em>件の現地調査データがあります。</p>
             <p v-else-if="contents.thumbnails.length > 0">キュー内には<em>{{ contents.thumbnails.length }}</em>件のサムネイルがあります。</p>
             <p v-else-if="contents.details.length > 0">キュー内には<em>{{ contents.details.length }}</em>件の現地調査データがあります。</p>
-            <p>このキューの状態は、<em>{{ status }}</em>です。</p>
+            <p>このキューは<b>{{ contents.userId }}</b>によるアップロードです。このキューの状態は、<em>{{ status }}</em>です。</p>
 
             <BackPrevPage />
 

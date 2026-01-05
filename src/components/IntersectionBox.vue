@@ -1,6 +1,11 @@
 <script lang="js" setup>
     import { computed } from 'vue';
-import noImage from '../assets/images/noimage.jpg';
+    import noImage from '../assets/images/noimage.jpg';
+    import { useTokenStore } from '../store';
+
+    // ユーザーのログイン情報を取得
+    const store = useTokenStore();
+    const json = computed(() => getDataFromJWT(store.token));
 
     const props = defineProps({
         intersection: Object,

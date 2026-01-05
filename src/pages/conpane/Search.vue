@@ -70,6 +70,14 @@
 
     // 状態をLocalStorageに保存したりする関数
     function loadEditData() {
+        if (localStorage.getItem("editedIntersections") == null) {
+            // 保存された状態が存在しない場合
+            show("状態が保存されていません！");
+        }
+        else {
+            editedIntersections.value = JSON.parse(localStorage.getItem("editedIntersections"));
+            show("状態を読み込みました。");
+        }
     }
 
     function saveEditData(force: boolean = false) {
@@ -86,6 +94,29 @@
 
     function confirmEditData() {
         
+    }
+
+    // 行を追加する（デフォルトで）
+    function addEditData() {
+        editedIntersections.value.push({
+            prefId: null,
+            areaId: null,
+            id: "",
+            status: "LIVE",
+            name: "",
+            sign: "",
+            isOfficialName: false,
+            decideYear: null,
+            operationYear: null,
+            refreshYear: null,
+            cars: [],
+            peds: [],
+            rover: "0",
+            sound: false,
+            location: { x: "", y: "" },
+            comment: "",
+            addLine: true,
+        });
     }
 </script>
 
@@ -109,13 +140,14 @@
         <IntersectionSearchForm @search="getSearchData"/>
 
         <!-- 交差点が存在する場合、フォームを繰り返し作成 -->
-        <p v-if="intersections.length > 0"><em>{{ intersections.length }}</em>件の交差点が見つかりました。この中身でよければ編集を始めてください。編集後に再度検索を行うと、編集内容が失われますので注意してください。</p>
+        <p v-if="editedIntersections.length > 0"><em>{{ editedIntersections.length }}</em>件の交差点を表示しています。この中身でよければ編集を始めてください。編集後に再度検索を行うと、編集内容が失われますので注意してください。</p>
         
         <!-- 状態を保存する・読み込むボタンを表示 -->
-        <div v-if="intersections.length > 0">
-            <button @click="saveEditData">状態を保存する</button>
+        <div>
+            <button @click="saveEditData(false)" v-if="editedIntersections.length > 0">状態を保存する</button>
             <button @click="loadEditData">状態を読み込む</button>
-            <button @click="confirmEditData">編集内容を確認する</button>
+            <button @click="confirmEditData" v-if="editedIntersections.length > 0">編集内容を確認する</button>
+            <button @click="addEditData">行を追加する</button>
         </div>
         <div class="wrapper">
             <table border="1">
@@ -138,11 +170,18 @@
                     <th style="width: 10rem">備考</th>
                 </tr>
                 <tr v-for="intersection in editedIntersections" :key="intersection.prefId + intersection.areaId + intersection.id">
-                    <td>{{ prefs.find(pref => pref.id == intersection.prefId).name }}</td>
+                    <td v-if="intersection.addLine === undefined">
+                        {{ prefs.find(pref => pref.id == intersection.prefId)?.name }}
+                    </td>
+                    <td v-else>
+                        <select v-model="intersection.prefId">
+                            <option v-for="pref in prefs" :key="pref.id" :value="pref.id">{{ pref.name }}</option>
+                        </select>
+                    </td>
                     <td><select>
-                        <option v-for="area in prefs.find(pref => pref.id == intersection.prefId).area" :key="area.id" :value="area.id" :selected="area.id == intersection.areaId">{{ area.id }}: {{ area.name }}</option>
+                        <option v-for="area in prefs.find(pref => pref.id == intersection.prefId)?.area" :key="area.id" :value="area.id" :selected="area.id == intersection.areaId">{{ area.id }}: {{ area.name }}</option>
                     </select></td>
-                    <td><input type="text" v-model="intersection.id" /></td>
+                    <td><input type="text" v-model="intersection.id" placeholder="必須" /></td>
                     <td><select v-model="intersection.status">
                         <option value="UNKNOWN" :selected="intersection.status == 'UNKNOWN'">行方不明</option>
                         <option value="LIVE" :selected="intersection.status == 'LIVE'">現存</option>
@@ -150,7 +189,7 @@
                         <option value="MOVE" :selected="intersection.status == 'MOVE'">移管</option>
                         <option value="MERGE" :selected="intersection.status == 'MERGE'">統合</option>
                     </select></td>
-                    <td><input type="text" v-model="intersection.name" required></td>
+                    <td><input type="text" v-model="intersection.name" required placeholder="必須"></td>
                     <td><input type="text" v-model="intersection.sign" placeholder="地名板が存在しない場合は空白"></td>
                     <td><input type="checkbox" v-model="intersection.isOfficialName"></td>
                     <td><select v-model="intersection.decideYear">
@@ -182,16 +221,18 @@
                 </tr>
             </table>
         </div>
-        <div v-if="intersections.length > 0">
-            <button @click="saveEditData">状態を保存する</button>
+        <div v-if="editedIntersections.length > 0">
+            <button @click="saveEditData(false)">状態を保存する</button>
             <button @click="loadEditData">状態を読み込む</button>
             <button @click="confirmEditData">編集内容を確認する</button>
+            <button @click="addEditData">行を追加する</button>
         </div>
 
-        <Dialog title="" type="info" v-if="warning != ''" showButton="true">
+        <Dialog title="" type="info" v-if="warning != ''">
             <p>{{ warning }}</p>
             <hr>
             <button @click="warning = ''; saveEditData(true)">OK</button>
+            <button @click="warning = ''; show('キャンセルされました');">キャンセル</button>
         </Dialog>
     </div>
 </template>
