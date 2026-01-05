@@ -310,9 +310,4 @@
         padding: 0.5rem;
         background-color: white;
     }
-
-    button {
-        padding: 0 1rem;
-        margin: 0.5rem;
-    }
 </style>

@@ -2,6 +2,7 @@ import { useHead } from "@unhead/vue";
 import axios from "axios";
 import { useCookies } from "vue3-cookies";
 import { useTokenStore } from "../store";
+import { Ref } from "vue";
 
 /**
  * 
@@ -151,4 +152,24 @@ export async function isAccessible(rank:number = -1): boolean {
     return new Promise((resolve, reject) => {
         resolve(rank === -1 ? res.data.rankId === -1 : res.data.rankId >= rank);
     });
+}
+
+/**
+ * 都道府県情報とエリア情報を取得し、中に代入する
+ * @param prefRef 都道府県全情報を入れるRef
+ * @param areaRef エリア情報全部を入れるRef。必要なければ無視
+ * 
+ * @return bool true:成功 false:失敗
+ */
+export async function getAllPrefs(prefRef: Ref, areaRef: Ref|null = null) {
+    const res = await axiosWithJWTToken("get", import.meta.env.PUBLIC_SERVER_ROOT + "/?withArea=true");
+    if (res == null) {
+        return false;
+    }
+    prefRef.value = res.data;
+
+    if (areaRef != null) {
+        areaRef.value = res.data.area;
+    }
+
 }
