@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import { getDataFromJWT } from './helpers/helpers';
 import { computed, onMounted, ref, watch } from 'vue';
-import { useTokenStore } from './store';
+import { useSessionStore, useTokenStore } from './store';
 import Toast from './components/common/Toast.vue';
 import { registerToast } from './composables/useToast';
+import { useSessionWatcher } from './composables/useSessionWatcher';
+import Dialog from './components/common/Dialog.vue';
 
 
   const store = useTokenStore();
+  const sessionStore = useSessionStore();
   const json = computed(() => getDataFromJWT(store.token));
+
+  // セッション監視を行うコンポーザブル
+  useSessionWatcher(30000); // 30秒ごとに監視
 
   // トーストバリュー
   const toast = ref();
@@ -39,6 +45,11 @@ import { registerToast } from './composables/useToast';
     </footer>
 
     <Toast ref="toast"/>
+
+    <Dialog v-if="sessionStore.expired" title="セッション切れ" type="error">
+      <p>サーバーの再起動やブラウザの環境設定が原因でセッションが切れてしまいました。お手数ですが再度ログインをお願いします。</p>
+      <RouterLink to="/conpane/login"><button @click="sessionStore.reset();">ログインする</button></RouterLink>
+    </Dialog>
   </div>
 
 </template>

@@ -1,7 +1,7 @@
 import { useHead } from "@unhead/vue";
 import axios from "axios";
 import { useCookies } from "vue3-cookies";
-import { useTokenStore } from "../store";
+import { useSessionStore, useTokenStore } from "../store";
 import { Ref } from "vue";
 
 /**
@@ -67,6 +67,13 @@ export async function axiosWithJWTToken(type: string,url:string, param?:object, 
             console.error(e);
         }
         if (e.response.status == 401) {
+            
+            // すでに再試行済みの場合やaliveチェックの場合強制ログアウト
+            if (retryCount > 0 || url.endsWith("/auth/alive")) {
+                forceLogout();
+                return null;
+            }
+
             // 再トークン払い出し
             console.debug("※トークンの期限切れ。再発行します");
             const {cookies} = useCookies();
@@ -108,6 +115,11 @@ export function logout(): boolean {
     return true;
 }
 
+export function forceLogout(): boolean {
+    logout();
+    useSessionStore().expire();
+    return true;
+}
 
 // Byte単位変換するヤツ
 // これ専用のライブラリってないものなのか
@@ -142,7 +154,7 @@ export function isMobile(): boolean {
 // アクセス権限を持っているかどうか確認するためのもの
 // 指定したランクを基に判断
 
-export async function isAccessible(rank:number = -1): boolean {
+export async function isAccessible(rank:number = -1): Promise<boolean> {
     const store = useTokenStore();
     const res = await axiosWithJWTToken("get", import.meta.env.PUBLIC_SERVER_ROOT + "/users/me");
     if (res == null) {

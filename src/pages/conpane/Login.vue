@@ -3,7 +3,8 @@
     import axios from 'axios';
     import { useCookies } from 'vue3-cookies';
     import { useRouter } from 'vue-router';
-import { useTokenStore } from '../../store';
+    import { useTokenStore } from '../../store';
+    import { setHeader } from '../../helpers/helpers';
 
     const store = useTokenStore();
     const { cookies } = useCookies();
@@ -11,6 +12,9 @@ import { useTokenStore } from '../../store';
 
     // エラーメッセージ
     const error = ref(null);
+
+    // ヘッダーセット
+    setHeader("ログイン");
 
     // ログインを行う関数
     const asyncLogin = async () => {
@@ -55,20 +59,22 @@ import { useTokenStore } from '../../store';
 </script>
 
 <template>
-    <h2>ログイン</h2>
-    <p class="error" v-if="error != null">{{ error }}</p>
-    <p>ユーザーID: <input type="text" name="id" autocomplete="userId" required></p>
-    <p>パスワード: <input type="password" name="password" autocomplete="current-password" required></p>
-    <p><button @click="asyncLogin">ログイン</button></p>
+    <div>
+        <h2>ログイン</h2>
+        <p class="error" v-if="error != null">{{ error }}</p>
+        <p>ユーザーID: <input type="text" name="id" autocomplete="userId" required></p>
+        <p>パスワード: <input type="password" name="password" autocomplete="current-password" required></p>
+        <p><button @click="asyncLogin">ログイン</button></p>
 
-    <hr>
+        <hr>
 
-    <p>まだアカウントをお持ちでない場合は、<RouterLink to="/conpane/signup">登録</RouterLink>してください。</p>
-    <p>パスワードを忘れた場合は、<RouterLink to="/conpane/password-reissue">パスワード再設定</RouterLink>してください。</p>
+        <p>まだアカウントをお持ちでない場合は、<RouterLink to="/conpane/signup">登録</RouterLink>してください。</p>
+        <p>パスワードを忘れた場合は、<RouterLink to="/conpane/password-reissue">パスワード再設定</RouterLink>してください。</p>
 
-    <div class="warn">
-        <p>ログインについて</p>
-        <p>ログインに複数回失敗すると、一時的にロックがかかります。ご注意ください。</p>
+        <div class="warn">
+            <p>ログインについて</p>
+            <p>ログインに複数回失敗すると、一時的にロックがかかります。ご注意ください。</p>
+        </div>
     </div>
 
 </template>

@@ -52,3 +52,21 @@ export const useSearchStore = defineStore("search", {
         storage: localStorage,
     }
 });
+
+// セッション確認用ストア（UI表示用）
+export const useSessionStore = defineStore("session", {
+    state: () => ({
+        expired: false,
+    }),
+    actions: {
+        expire() {
+            this.expired = true;
+        },
+        reset() {
+            this.expired = false;
+        }
+    },
+    persist: {
+        storage: localStorage,
+    }
+})
