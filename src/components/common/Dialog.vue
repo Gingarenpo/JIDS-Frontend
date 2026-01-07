@@ -3,6 +3,8 @@
     const props = defineProps({
         title: { type: String, default: "Dialog" },
         type: { type: String, default: "info" },
+        width: { type: String, default: "50vw" },
+        height: { type: String, default: "50vh" },
     });
 
     const iconClass = computed(() => {
@@ -20,11 +22,18 @@
 </script>
 
 <template>
-    <div id="overlay"></div>
-    <div id="dialog" :class="props.type">
-        <div class="contents">
-            <p><i :class="iconClass"></i>{{ props.title }}</p>
-            <slot>Ooops</slot>
+    <div>
+        <div id="overlay"></div>
+        <div id="dialog" :class="props.type" :style="{
+            width: props.width,
+            height: props.height,
+            top: `calc((100vh - ${props.height}) / 2)`,
+            left: `calc((100vw - ${props.width}) / 2)`,
+        }">
+            <div class="contents">
+                <p><i :class="iconClass"></i>{{ props.title }}</p>
+                <slot>Ooops</slot>
+            </div>
         </div>
     </div>
 </template>
@@ -63,11 +72,7 @@
     #dialog {
         background-color: white;
         border: 1px solid gray;
-        width: 50vw;
-        height: 50vh;
         position: fixed;
-        top: 25vh;
-        left: 25vw;
         z-index: 3;
         border-radius: 1rem;
         padding: 1rem;
@@ -79,14 +84,14 @@
         overflow-y: scroll;
     }
 
-    :slotted(div) {
+    /*:slotted(div) {
         display: block;
         margin: auto;
         width: 50%;
         position: absolute;
         bottom: 1rem;
         left: 25%;
-    }
+    }*/
 
     #dialog p:first-child {
         font-size: 1.5rem;

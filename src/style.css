@@ -252,7 +252,7 @@ button {
   border-radius: 0.5rem;
   border: 1px solid var(--border-dark-color);
   background-color: var(--dark-color);
-  color: white;
+  color: white !important;
   box-shadow: 0px 4px var(--border-light-color);
   cursor: pointer;
   transition: 0.2s;
