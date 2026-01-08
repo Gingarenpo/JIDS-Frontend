@@ -31,6 +31,10 @@
 
   --border-light-color: #cccccc;
   --border-dark-color: #888888;
+
+  --quarter-amount-color: #ff000080;
+  --half-amount-color: #ffff0080;
+  --full-amount-color: #00ffff80;
 }
 
 * {

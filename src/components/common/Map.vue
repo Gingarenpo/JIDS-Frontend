@@ -241,7 +241,7 @@
 <style scoped>
     #map {
         width: 100%;
-        height: 70vh;
+        height: 50vh;
         position: relative;
     }
 </style>
