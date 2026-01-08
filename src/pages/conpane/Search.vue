@@ -1,13 +1,21 @@
 <script lang="ts" setup>
     import HelpSearch from '../../components/common/HelpSearch.vue';
     import IntersectionSearchForm from '../../components/common/IntersectionSearchForm.vue';
-    import { getAllPrefs, isAccessible, setHeader } from '../../helpers/helpers';
+    import { axiosWithJWTToken, getAllPrefs, isAccessible, setHeader } from '../../helpers/helpers';
     import { useSearchStore } from '../../store';
-    import { computed, onMounted, ref } from 'vue';
+    import { computed, onMounted, ref, Ref } from 'vue';
     import axios from 'axios';
     import Dialog from '../../components/common/Dialog.vue';
     import { useToast } from '../../composables/useToast';
 import Loading from '../../components/common/Loading.vue';
+
+    interface EditDiffs {
+        diffs: {
+            diff: Record<string, any>,
+            edited: any,
+            intersection: any
+        }[]
+    }
 
     // トーストを作る
     const { show } = useToast();
@@ -39,7 +47,7 @@ import Loading from '../../components/common/Loading.vue';
     const superadmin = ref(false);
 
     // 差分内容
-    const editedDiffs = ref([]);
+    const editedDiffs: Ref<EditDiffs['diffs']> = ref([]);
 
     // サーバーに承認をもらっている最中かどうかのフラグ
     const sending = ref(false);
@@ -127,7 +135,8 @@ import Loading from '../../components/common/Loading.vue';
                 const e = edited[key];
                 const o = original[key];
 
-                if (JSON.stringify(e) !== JSON.stringify(o)) {
+                // 一致しないもの、あるいは新規の場合は全ての差分
+                if (JSON.stringify(e) !== JSON.stringify(o) || original.prefId == null) {
                     diffs[key] = {key: key, before: (original.prefId != null) ? o : null, after: e};
                 }
             }
@@ -257,6 +266,31 @@ import Loading from '../../components/common/Loading.vue';
     async function sendEditData() {
         // まず送信中フラグを立てる
         sending.value = true;
+
+        // APIに渡すためのJSONを整形する
+        const json = {
+            diffs: editedDiffs.value.map((diff) => {
+                return {
+                    diff: diff.diff,
+                    edited: {
+                        prefId: diff.edited.prefId,
+                        areaId: diff.edited.areaId,
+                        id: diff.edited.id
+                    },
+                    original: {
+                        prefId: diff.intersection.prefId,
+                        areaId: diff.intersection.areaId,
+                        id: diff.intersection.id
+                    },
+                }
+            })
+        };
+
+        // 検証用APIを呼び出す
+        const res = await axiosWithJWTToken("post", import.meta.env.PUBLIC_SERVER_ROOT + "/validates/search", json);
+
+        // 送信終了
+        sending.value = false;
     }
 </script>
 
@@ -387,7 +421,7 @@ import Loading from '../../components/common/Loading.vue';
                     <h3 v-if="diff.intersection.prefId == null">新規：{{ diff.edited.prefId }}-{{ diff.edited.areaId }}-{{ diff.edited.id }}「{{ diff.edited.name }}」</h3>
                     <h3 v-else>更新：{{ diff.intersection.prefId }}-{{ diff.intersection.areaId }}-{{ diff.intersection.id }}「{{ diff.intersection.name }}」→　{{ diff.edited.prefId }}-{{ diff.edited.areaId }}-{{ diff.edited.id }}「{{ diff.edited.name }}」</h3>
                     <ul>
-                        <li v-for="d in diff.diff" :key="d">{{ d.key }}: {{ d.before ?? '（空）' }} → {{ d.after }}</li>
+                        <li v-for="d in diff.diff" :key="d">{{ d.key }}: {{ d.before ?? '（空）' }} → {{ (d.after == null || d.after == '') ? '（空）' : d.after }}</li>
                     </ul>
                 </div>
 
