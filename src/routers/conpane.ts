@@ -51,12 +51,14 @@ export default {
         {
             path: "/conpane/admin/queues",
             name: "conpaneQueues",
+            meta: { requiresAuth: true, requiredRank: -1},
             component: () => import("../pages/conpane/admin/Queues.vue"),
         },
 
         {
             path: "/conpane/admin",
             name: "conpaneAdmin",
+            meta: { requiresAuth: true, requiredRank: -1},
             component: () => import("../pages/conpane/Admin.vue"),
         },
 

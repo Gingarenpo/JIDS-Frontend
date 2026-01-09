@@ -10,6 +10,10 @@ import Loading from "../../../components/common/Loading.vue";
     // キューを取得
     axiosWithJWTToken("get", import.meta.env.PUBLIC_SERVER_ROOT + "/queues")
     .then((response) => {
+        if (response.status == 403) {
+            queues.value = [];
+            return;
+        }
         queues.value = response.data;
     });
 </script>
