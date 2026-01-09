@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { getDataFromJWT } from './helpers/helpers';
-import { computed, onMounted, ref, watch } from 'vue';
-import { useSessionStore, useTokenStore } from './store';
+import { computed, onMounted, ref } from 'vue';
+import { useTokenStore } from './store';
 import Toast from './components/common/Toast.vue';
 import { registerToast } from './composables/useToast';
 
 
   const store = useTokenStore();
   const json = computed(() => getDataFromJWT(store.token));
+
+  console.log(json);
 
   // トーストバリュー
   const toast = ref();
@@ -24,6 +26,10 @@ import { registerToast } from './composables/useToast';
     </header>
     <div id="container">
       <main>
+        <div class="error" v-if="json && json.legacy">
+          <p>旧システムのパスワードを使用しています</p>
+          <p>ログインユーザーは旧システムのパスワードを使用しています。<RouterLink to="/conpane/me">ここからパスワードを再度設定してください。</RouterLink>このメッセージは変更が完了するまでどのページでも表示されます。旧システムと「同じ文字列の」パスワードも使用可能なのでなるべく早く変更してください。</p>
+        </div>
         <router-view v-slot="{ Component }">
             <component :is="Component" />
         </router-view>
