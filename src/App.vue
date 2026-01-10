@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { getDataFromJWT } from './helpers/helpers';
-import { computed, onMounted, ref } from 'vue';
+import { getDataFromJWT, isMobile } from './helpers/helpers';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useTokenStore } from './store';
 import Toast from './components/common/Toast.vue';
 import { registerToast } from './composables/useToast';
@@ -8,6 +9,7 @@ import { registerToast } from './composables/useToast';
 
   const store = useTokenStore();
   const json = computed(() => getDataFromJWT(store.token));
+  const route = useRoute(); // 現在のルートを取得
 
   console.log(json);
 
@@ -17,12 +19,25 @@ import { registerToast } from './composables/useToast';
   onMounted(() => {
     registerToast(toast.value);
   })
+
+  // モバイル版用サイドバー開け閉め
+  const side = ref(false);
+
+  function openSide() {
+    side.value = !side.value;
+  }
+
+  // 画面遷移が発生したら閉じる
+  watch(() => route.fullPath, () => {
+    side.value = false;
+  })
 </script>
 
 <template>
   <div>
     <header>
       <h1><RouterLink to="/" class="no-link">JIDS</RouterLink></h1>
+      <div class="sidebar" v-if="isMobile()" @click="openSide()">≡</div>
     </header>
     <div id="container">
       <main>
@@ -34,12 +49,12 @@ import { registerToast } from './composables/useToast';
             <component :is="Component" />
         </router-view>
       </main>
-      <div id="side">
+      <div id="side" :class="{'open': side}">
         <Side/>
       </div>
     </div>
     <footer>
-      <p>&copy; 2024-2025 Gingarenpo. All rights reserved.</p>
+      <p>&copy; 2024-2026 Gingarenpo. All rights reserved.</p>
       <p v-if="json">ようこそ、<RouterLink to="/conpane">{{json.user_name}}</RouterLink>さん</p>
       <p v-else>情報提供者ですか？ <RouterLink to="/conpane">ログインしてください。</RouterLink></p>
     </footer>

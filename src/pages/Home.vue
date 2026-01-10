@@ -213,5 +213,9 @@
         .box > div {
             flex-basis: 100%;
         }
+
+        .bcr {
+            flex-direction: column;
+        }
     }
 </style>

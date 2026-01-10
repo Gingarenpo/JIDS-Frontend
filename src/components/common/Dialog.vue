@@ -3,8 +3,8 @@
     const props = defineProps({
         title: { type: String, default: "Dialog" },
         type: { type: String, default: "info" },
-        width: { type: String, default: "50vw" },
-        height: { type: String, default: "50vh" },
+        width: { type: String, default: "50svw" },
+        height: { type: String, default: "50svh" },
     });
 
     const iconClass = computed(() => {
